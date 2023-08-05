@@ -71,6 +71,8 @@
     }
 
 
+
+
     @keyframes neon-animation {
       0% {
         transform: translateX(100%);
@@ -79,6 +81,53 @@
       100% {
         transform: translateX(-100%);
       }
+    }
+
+    .song-list-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      /* width: 400px; */
+      /* 너비는 neon-sign과 동일하게 설정 */
+    }
+
+    .song-index {
+      margin-right: 10px;
+      font-size: 1.5em;
+      /* 숫자 앞에 공간을 주기 위해 폰트 크기를 조절합니다. */
+    }
+
+    .song-info {
+      display: flex;
+      align-items: center;
+    }
+
+    .song-info-text {
+      font-size: 1.5em;
+      font-family: 'Shadows Into Light', cursive;
+    }
+
+    .button-group {
+      display: flex;
+      align-items: center;
+      margin-right: auto;
+      /* 버튼들을 오른쪽으로 정렬하기 위해 왼쪽 여백을 설정합니다. */
+    }
+
+    .button-group button {
+      background-color: #FFC107;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      margin-right: 5px;
+      padding: 5px;
+      cursor: pointer;
+      font-size: 1.2em;
+    }
+
+    .delete-button {
+      background-color: #eb7a9f;
+      /* 분홍색 배경색으로 설정 */
     }
   </style>
   <link href="/css/digital-7.ttf" rel="stylesheet">
@@ -103,8 +152,8 @@
     <h2>Song List</h2>
     <ul id="song-list">
       <% songs.forEach((song, index)=> { %>
-        <li data-song-id="<%= index %>">
-          <%= song %>
+        <li data-song-id="<%= index %>" class="song-list-item">
+          <div class="button-group">
             <form id="deleteForm<%= index %>" action="/admin/<%= index %>?_method=DELETE" method="post">
               <button type="submit" class="delete-button" data-index="<%= index %>">Delete</button>
             </form>
@@ -116,6 +165,10 @@
               <input type="hidden" name="index" value="<%= index %>">
               <button type="submit" class="down-button" data-index="<%= index %>">Down</button>
             </form>
+            <span class="song-info-text">
+              <%= song %>
+            </span>
+          </div>
         </li>
         <% }); %>
     </ul>
@@ -123,80 +176,7 @@
   </div>
 
   <script>
-    const deleteButtons = document.querySelectorAll('.delete-button');
-    deleteButtons.forEach(button => {
-      button.addEventListener('click', (e) => {
-        const index = e.target.getAttribute('data-index');
-        document.getElementById(`deleteForm${index}`).submit();
-      });
-    });
 
-    const songList = document.getElementById("song-list");
-
-    function moveSong(up, index) {
-      const songList = document.getElementById('song-list');
-      const song = songList.children[index];
-      if ((up && index > 0) || (!up && index < songList.children.length - 1)) {
-        const targetIndex = up ? index - 1 : index + 1;
-        songList.removeChild(song);
-        songList.insertBefore(song, songList.children[targetIndex]);
-        const songIds = Array.from(songList.children).map(li => li.dataset.songId);
-        updateSongOrder(songIds);
-      }
-    }
-
-    const upButtons = document.querySelectorAll('.up-button');
-    upButtons.forEach(button => {
-      button.addEventListener('click', (e) => {
-        const index = parseInt(e.target.getAttribute('data-index'));
-        moveSong(true, index);
-      });
-    });
-
-    const downButtons = document.querySelectorAll('.down-button');
-    downButtons.forEach(button => {
-      button.addEventListener('click', (e) => {
-        const index = parseInt(e.target.getAttribute('data-index'));
-        moveSong(false, index);
-      });
-    });
-
-    document.addEventListener('DOMContentLoaded', function () {
-      initSortable();
-    });
-
-    function initSortable() {
-      const songList = document.getElementById('song-list');
-
-      new Sortable(songList, {
-        handle: '.drag-handle',
-        animation: 150,
-        onEnd: function (event) {
-          const songIds = Array.from(songList.children).map(li => li.dataset.songId);
-          updateSongOrder(songIds);
-        },
-      });
-    }
-
-    function updateSongOrder(songIds) {
-      // 서버로 AJAX 요청을 보냅니다.
-      // 여기서는 jQuery 대신 fetch API를 사용합니다.
-      fetch('/admin/updateOrder', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ songIds }),
-      })
-        .then(response => response.json())
-        .then(data => {
-          // 서버에서 응답을 받은 후 처리할 코드를 여기에 작성합니다.
-          console.log(data); // 예: 서버에서 응답한 데이터를 콘솔에 출력
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        });
-    }
 
   </script>
 </body>

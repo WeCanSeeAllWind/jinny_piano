@@ -53,14 +53,14 @@ app.delete('/admin/:index', (req, res) => {
 });
 
 app.post('/admin/updateOrder', (req, res) => {
-  const songIds = req.body.songIds;
-  const newSongList = [];
-  for (const id of songIds) {
-    if (songList[id]) {
-      newSongList.push(songList[id]);
-    }
-  }
-  songList = newSongList;
+  // const songIds = req.body.songIds;
+  // const newSongList = [];
+  // for (const id of songIds) {
+  //   if (songList[id]) {
+  //     newSongList.push(songList[id]);
+  //   }
+  // }
+  // songList = newSongList;
   res.json({ success: true });
 });
 
