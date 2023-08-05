@@ -101,24 +101,24 @@
     </form>
 
     <h2>Song List</h2>
-    <table>
-      <tr>
-        <th>Song</th>
-        <th>Action</th>
-      </tr>
+    <ul id="song-list">
       <% songs.forEach((song, index)=> { %>
-        <tr>
-          <td>
-            <%= song %>
-          </td>
-          <td>
+        <li data-song-id="<%= index %>">
+          <%= song %>
             <form id="deleteForm<%= index %>" action="/admin/<%= index %>?_method=DELETE" method="post">
-              <button type="button" class="delete-button" data-index="<%= index %>">Delete</button>
+              <button type="submit" class="delete-button" data-index="<%= index %>">Delete</button>
             </form>
-          </td>
-        </tr>
+            <form id="upForm<%= index %>" action="/admin/<%= index %>/up" method="post">
+              <input type="hidden" name="index" value="<%= index %>">
+              <button type="submit" class="up-button" data-index="<%= index %>">Up</button>
+            </form>
+            <form id="downForm<%= index %>" action="/admin/<%= index %>/down" method="post">
+              <input type="hidden" name="index" value="<%= index %>">
+              <button type="submit" class="down-button" data-index="<%= index %>">Down</button>
+            </form>
+        </li>
         <% }); %>
-    </table>
+    </ul>
 
   </div>
 
@@ -130,6 +130,74 @@
         document.getElementById(`deleteForm${index}`).submit();
       });
     });
+
+    const songList = document.getElementById("song-list");
+
+    function moveSong(up, index) {
+      const songList = document.getElementById('song-list');
+      const song = songList.children[index];
+      if ((up && index > 0) || (!up && index < songList.children.length - 1)) {
+        const targetIndex = up ? index - 1 : index + 1;
+        songList.removeChild(song);
+        songList.insertBefore(song, songList.children[targetIndex]);
+        const songIds = Array.from(songList.children).map(li => li.dataset.songId);
+        updateSongOrder(songIds);
+      }
+    }
+
+    const upButtons = document.querySelectorAll('.up-button');
+    upButtons.forEach(button => {
+      button.addEventListener('click', (e) => {
+        const index = parseInt(e.target.getAttribute('data-index'));
+        moveSong(true, index);
+      });
+    });
+
+    const downButtons = document.querySelectorAll('.down-button');
+    downButtons.forEach(button => {
+      button.addEventListener('click', (e) => {
+        const index = parseInt(e.target.getAttribute('data-index'));
+        moveSong(false, index);
+      });
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+      initSortable();
+    });
+
+    function initSortable() {
+      const songList = document.getElementById('song-list');
+
+      new Sortable(songList, {
+        handle: '.drag-handle',
+        animation: 150,
+        onEnd: function (event) {
+          const songIds = Array.from(songList.children).map(li => li.dataset.songId);
+          updateSongOrder(songIds);
+        },
+      });
+    }
+
+    function updateSongOrder(songIds) {
+      // 서버로 AJAX 요청을 보냅니다.
+      // 여기서는 jQuery 대신 fetch API를 사용합니다.
+      fetch('/admin/updateOrder', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ songIds }),
+      })
+        .then(response => response.json())
+        .then(data => {
+          // 서버에서 응답을 받은 후 처리할 코드를 여기에 작성합니다.
+          console.log(data); // 예: 서버에서 응답한 데이터를 콘솔에 출력
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    }
+
   </script>
 </body>
 

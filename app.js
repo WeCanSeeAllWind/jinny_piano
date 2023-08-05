@@ -52,6 +52,39 @@ app.delete('/admin/:index', (req, res) => {
   res.redirect('/admin');
 });
 
+app.post('/admin/updateOrder', (req, res) => {
+  const songIds = req.body.songIds;
+  const newSongList = [];
+  for (const id of songIds) {
+    if (songList[id]) {
+      newSongList.push(songList[id]);
+    }
+  }
+  songList = newSongList;
+  res.json({ success: true });
+});
+
+// 위와 아래 버튼 처리를 위한 라우트
+app.post('/admin/:index/up', (req, res) => {
+  const index = parseInt(req.params.index);
+  if (index > 0) {
+    const temp = songs[index];
+    songs[index] = songs[index - 1];
+    songs[index - 1] = temp;
+  }
+  res.redirect('/admin');
+});
+
+app.post('/admin/:index/down', (req, res) => {
+  const index = parseInt(req.params.index);
+  if (index < songs.length - 1) {
+    const temp = songs[index];
+    songs[index] = songs[index + 1];
+    songs[index + 1] = temp;
+  }
+  res.redirect('/admin');
+});
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
