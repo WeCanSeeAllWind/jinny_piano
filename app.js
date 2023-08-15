@@ -85,6 +85,12 @@ app.post('/admin/:index/down', (req, res) => {
   res.redirect('/admin');
 });
 
+
+// Route to render the admin page with the song list
+app.get('/main', (req, res) => {
+  res.render('main');
+});
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
