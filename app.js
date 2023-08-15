@@ -4,6 +4,11 @@ const app = express();
 const port = 3000;
 const methodOverride = require('method-override');
 
+const today = new Date();
+const year = today.getFullYear(); // 년도
+const month = today.getMonth() + 1;  // 월
+const date = today.getDate();  // 날짜
+
 // method-override 미들웨어를 사용합니다.
 app.use(methodOverride('_method'));
 
@@ -38,6 +43,9 @@ app.post('/admin', (req, res) => {
   if (song !== '') {
     // songs.unshift(song);
     songs.push(song);// 맨 앞에 추가하기 위해 unshift 사용
+
+    // 지니의 소중한 DB를 남기기
+    fs.appendFileSync('./log/jinny_db', `${year}.${month}.${date} ` + song + "\r\n");
   }
   res.redirect('/admin');
 });
