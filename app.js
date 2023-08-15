@@ -91,6 +91,10 @@ app.get('/main', (req, res) => {
   res.render('main');
 });
 
+app.get('/soozin', (req, res) => {
+  res.render('soozin');
+});
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);

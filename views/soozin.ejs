@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Song List</title>
+  <style>
+    body {
+      background-color: #fff;
+      /* 배경색은 흰색(#fff)로 설정 */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .neon-sign-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .neon-sign {
+      border: 4px solid #f8efd7;
+      box-shadow: 0 0 10px #dbc0ca, 0 0 20px #dbc0ca;
+      border-radius: 25px;
+      padding: 10px;
+      width: 80px;
+      height: 20px;
+      overflow: hidden;
+      background-color: rgb(255, 255, 255, 0.3);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    @font-face {
+      font-family: 'GamsengCafe';
+      src: url('/css/KNPSKkomi.otf') format('truetype');
+    }
+
+    .neon-sign .neon-text {
+      white-space: nowrap;
+      font-size: 1em;
+      font-family: 'NanumMyeongjoBold';
+      color: #2e2c28;
+      letter-spacing: 0.05em;
+    }
+  </style>
+  <link href="/css/digital-7.ttf" rel="stylesheet">
+  <link href="https://hangeul.pstatic.net/hangeul_static/css/nanum-myeongjo.css" rel="stylesheet">
+</head>
+
+<body>
+  <div class="neon-sign-container">
+    <div class="neon-sign">
+      <div class="neon-text">
+        Jinny BABO
+      </div>
+    </div>
+  </div>
+
+</body>
+<script>
+  function autoRefreshPage() {
+    location.reload();
+  }
+  setInterval(autoRefreshPage, 2000);
+</script>
+
+</html>
