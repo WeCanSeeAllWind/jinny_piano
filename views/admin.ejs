@@ -132,9 +132,38 @@
       font-size: 1.2em;
     }
 
-    .delete-button {
+    .button-group .delete-button {
       background-color: #eb7a9f;
       /* 분홍색 배경색으로 설정 */
+    }
+
+    /* 모달 스타일 */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 25%;
+      top: 25%;
+      width: 50%;
+      height: 50%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .modal-content {
+      background-color: #fefefe;
+      margin: 10% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+    }
+
+    .close {
+      color: #aaaaaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
     }
   </style>
   <link href="/css/digital-7.ttf" rel="stylesheet">
@@ -150,20 +179,17 @@
   </div>
 
   <div>
-    <h2>Add a Song</h2>
+    <h2>🐈 루시가 엄마 사랑한데요~💝</h2>
     <form action="/admin" method="post">
       <input type="text" name="song" placeholder="Enter song name and artist" required>
       <button type="submit">Add Song</button>
     </form>
 
-    <h2>Song List</h2>
+    <h2>예쁜 애기여보 사랑해요💖</h2>
     <ul id="song-list">
       <% songs.forEach((song, index)=> { %>
         <li data-song-id="<%= index %>" class="song-list-item">
           <div class="button-group">
-            <form id="deleteForm<%= index %>" action="/admin/<%= index %>?_method=DELETE" method="post">
-              <button type="submit" class="delete-button" data-index="<%= index %>">Delete</button>
-            </form>
             <form id="upForm<%= index %>" action="/admin/<%= index %>/up" method="post">
               <input type="hidden" name="index" value="<%= index %>">
               <button type="submit" class="up-button" data-index="<%= index %>">Up</button>
@@ -175,16 +201,57 @@
             <span class="song-info-text">
               <%= song %>
             </span>
+            <span style="width: 10px;"></span>
+            <!-- <button type="submit" class="edit-button" data-index="<%= index %>" onclick="handleEdit()">Edit</button> -->
+            <button type="button" class="edit-button" data-index="<%= index %>" onclick='handleEdit("<%= index %>", "<%= song %>")'>Edit</button>
+            <form id="deleteForm<%= index %>" action="/admin/<%= index %>?_method=DELETE" method="post">
+              <button type="submit" class="delete-button" data-index="<%= index %>">Delete</button>
+            </form>
           </div>
         </li>
         <% }); %>
     </ul>
 
+    <div id="myModal" class="modal">
+      <div class="modal-content">
+        <span class="close" id="closeBtn">&times;</span>
+        <h2>쪼꼬미 여보야 사랑해</h2>
+        <form id="editForm" action="/admin/edit" method="post">
+          <!-- 편집할 내용을 입력하는 입력란 등을 추가 -->
+          <input type="text" id="editSongInput" name="editedSong" placeholder="Edit song name and artist" required>
+          <input type="hidden" id="editSongIndex" name="index" value="">
+          <!-- <button type="submit">Save</button> -->
+          <button type="submit" id="saveButton">Save</button>
+        </form>
+      </div>
+    </div>
+
   </div>
 
+
+
   <script>
+    // Edit 버튼 클릭 시 모달 열기
+    function handleEdit(index, song) {
+      console.log(index, song);
+      const modal = document.getElementById("myModal");
+      const editedSongInput = document.getElementById("editSongInput");
+      const editedSongIndex = document.getElementById("editSongIndex");
 
+      // 모달 내용 초기화
+      editedSongInput.value = song;
+      editedSongIndex.value = index;
+      modal.style.display = "block";
+    }
 
+    // 모달 닫기
+    const closeBtn = document.getElementById("closeBtn");
+    closeBtn.addEventListener("click", function () {
+      const modal = document.getElementById("myModal");
+      modal.style.display = "none";
+    });
+
+    
   </script>
 </body>
 

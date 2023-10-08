@@ -93,6 +93,13 @@ app.post('/admin/:index/down', (req, res) => {
   res.redirect('/admin');
 });
 
+app.post('/admin/edit', (req, res) => {
+  const editedSong = req.body.editedSong;
+  const index = req.body.index;
+  songs[index] = editedSong;
+  res.redirect('/admin');
+});
+
 
 // Route to render the admin page with the song list
 app.get('/main', (req, res) => {
