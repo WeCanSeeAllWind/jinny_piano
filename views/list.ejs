@@ -61,9 +61,31 @@
       /* 추가: 세로 방향 가운데 정렬 */
     }
 
+    .neon-sign2 {
+      /* border: 4px solid #ff0; */
+      border: 0px;
+      border-radius: 15px;
+      padding: 10px;
+      width: 400px;
+      height: 80px;
+      overflow: hidden;
+      /* background-color: rgb(0, 0, 0, 0.9); */
+      background-color: rgb(0, 0, 0, 1);
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
     @font-face {
       font-family: 'GamsengCafe';
       src: url('/css/KNPSKkomi.otf') format('truetype');
+    }
+
+    @font-face {
+      font-family: 'Digital7';
+      src: url('/css/digital-7.ttf') format('truetype');
     }
 
     .neon-sign .neon-text {
@@ -130,7 +152,7 @@
       letter-spacing: 5px;
     }
     .green{
-      color: rgb(0, 90, 0);
+      color: rgb(6, 6, 19);
       padding-left: 0%;
       padding-right: 0%;
       margin-left: 0%;
@@ -150,34 +172,118 @@
       margin-left: 0%;
       margin-right: 0%;
     }
+
+    .digital-clock {
+      font-family: 'Digital7', sans-serif;
+      font-size: 3em;
+      color: #f8efd7;
+      -webkit-text-stroke: 1px #f8efd7;
+      text-shadow: 0 0 10px #edaae4, 0 0 20px #edaae4, 0 0 30px #edaae4, 0 0 40px #edaae4, 0 0 70px #edaae4;
+      animation: none !important;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .heart {
+      color: red;
+      font-size: 3em;
+    }
+
   </style>
-  <link href="/css/digital-7.ttf" rel="stylesheet">
 </head>
 
 <body>
   <div class="white-wrapper">
-    <div class="neon-sign-container">
+    <!-- <div class="neon-sign-container">
       <div class="neon-sign">
         <div class="neon-text">
-          <%= songs.length> 0 ? songs[0] : '' %>
+          <% if (songs.length === 0) { %>
+            <div class="digital-clock" id="countdown">03:30:30</div>
+          <% } else { %>
+            <%= songs[0] %>
+          <% } %>
         </div>
       </div>
-    </div>
-    <div class="button-box">
-      <img src="/img/playlist_right_menu_x-max.png" class="btn" />
-      <div class="btn-text">
-        <span class="green">Merry Christmas</span>
+    </div> -->
+
+    <!-- <div class="neon-sign-container">
+      <div class="neon-sign">
+        <% if (songs.length===0) { %>
+          <div class="digital-clock" id="countdown"><%= nowfromNewYear %></div>
+        <% } else { %>
+          <div class="neon-text">
+            <%= songs[0] %>
+          </div>
+        <% } %>
       </div>
-      <img src="/img/playlist_right_menu_x-max.png" class="btn" />
+    </div> -->
+
+    <div class="neon-sign-container">
+      <% if (songs.length===0 || songs[0]==='CountDown') { %>
+        <div class="neon-sign2">
+          <div class="digital-clock" id="countdown"><%= nowfromNewYear %></div>
+        </div>
+      <% } else { %>
+        <div class="neon-sign">
+          <div class="neon-text"><%= songs[0] %></div>
+        </div>
+      <% } %>
+    </div>
+    
+    <div class="button-box">
+      <!-- <img src="/img/playlist_right_menu_x-max.png" class="btn" /> -->
+      <div class="btn-text">
+        <span class="green">❤️ Happy New Year ❤️</span>
+      </div>
+      <!-- <img src="/img/playlist_right_menu_x-max.png" class="btn" /> -->
     </div>
   </div>
 
+  <script>
+    function updateCountdown() {
+      var now = new Date();
+      var targetDate = new Date("2024-01-01T00:00:00");
+      // var targetDate = new Date("2023-12-31T18:47:00");
+      var timeDifference = targetDate - now;
+
+      var seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+      var minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+      var hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      
+      if (now < targetDate) {
+        document.getElementById("countdown").textContent = `${hours}:${minutes}:${seconds} New Year !`;
+      }
+      
+    }
+
+
+    function autoRefreshTime() {
+      var now = new Date();
+      var targetDate = new Date("2024-01-01T00:00:00");
+      // var targetDate = new Date("2023-12-31T18:47:00");
+      if (now >= targetDate) {
+        document.getElementById("countdown").textContent = "Happy New Year !";
+      } else {
+        updateCountdown();
+      }
+    }
+
+    // setInterval(autoRefreshTime, 1000);
+    // if (songs.length === 0 || songs[0] === 'CountDown') {
+    //     setInterval(autoRefreshTime, 1000);
+    // }
+    <% if (songs.length === 0 || songs[0] === 'CountDown') { %>
+      setInterval(autoRefreshTime, 1000);
+    <% } %>
+
+    function autoRefreshPage() {
+        location.reload();
+    }
+    setInterval(autoRefreshPage, 10000);
+  </script>
+
 </body>
-<script>
-  function autoRefreshPage() {
-    location.reload();
-  }
-  setInterval(autoRefreshPage, 10000);
-</script>
 
 </html>

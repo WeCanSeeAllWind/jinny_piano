@@ -203,10 +203,12 @@
             </span>
             <span style="width: 10px;"></span>
             <!-- <button type="submit" class="edit-button" data-index="<%= index %>" onclick="handleEdit()">Edit</button> -->
-            <button type="button" class="edit-button" data-index="<%= index %>" onclick='handleEdit("<%= index %>", "<%= song %>")'>Edit</button>
-            <form id="deleteForm<%= index %>" action="/admin/<%= index %>?_method=DELETE" method="post">
-              <button type="submit" class="delete-button" data-index="<%= index %>">Delete</button>
-            </form>
+            <% if (song!=='CountDown' ) { %>
+              <button type="button" class="edit-button" data-index="<%= index %>" onclick='handleEdit("<%= index %>", "<%= song %>")'>Edit</button>
+              <form id="deleteForm<%= index %>" action="/admin/<%= index %>?_method=DELETE" method="post">
+                <button type="submit" class="delete-button" data-index="<%= index %>">Delete</button>
+              </form>
+            <% } %>
           </div>
         </li>
         <% }); %>

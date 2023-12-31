@@ -17,7 +17,7 @@ app.set('view engine', 'ejs');
 app.set('views', './views');
 
 // Array to store the song list
-let songs = [];
+let songs = ["CountDown"];
 
 // Middleware to parse JSON and urlencoded data from requests
 app.use(express.json());
@@ -28,7 +28,21 @@ app.use(express.static('public'));
 
 // Route to render the list page
 app.get('/list', (req, res) => {
-  res.render('list', { songs });
+  var now = new Date();
+  var targetDate = new Date("2024-01-01T00:00:00");
+  // var targetDate = new Date("2023-12-31T18:47:00");
+  var timeDifference = targetDate - now;
+
+  var seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+  var minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+  var hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  let nowfromNewYear = `Happy New Year !`;
+  if (now >= targetDate) {
+    nowfromNewYear = `Happy New Year !`;
+  } else {
+    nowfromNewYear = `${hours}:${minutes}:${seconds} New Year`;
+  }
+  res.render('list', { songs, nowfromNewYear });
 });
 
 
