@@ -1,3 +1,3 @@
 #!/bin/sh
-cd ~/Documents/project/jinny_piano
+cd /Users/jinny/Desktop/playlist/jinny_piano
 node app.js
